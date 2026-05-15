@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-CarWashApplication<carwash>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.witbank.carwash.CarWashApplication",
+            "projectName": "carwash",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

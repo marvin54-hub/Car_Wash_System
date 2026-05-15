@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Witbank Elite Car Wash | Premium Service</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="glass-nav">
+        <div class="logo">WITBANK <span>ELITE</span></div>
+        <ul class="nav-links">
+            <li><a href="#services">Services</a></li>
+            <li><a href="#booking">Book Now</a></li>
+            <li><a href="#about">About</a></li>
+        </ul>
+    </nav>
+
+    <section class="hero" style="background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.8)), url('/images/hero.png') no-repeat center center/cover;">
+        <div class="hero-content">
+            <h1 class="animate-up">Beyond Clean. <span>Pure Perfection.</span></h1>
+            <p class="animate-up delay-1">Witbank's premier automotive spa experience. We don't just wash; we restore.</p>
+            <div class="hero-btns animate-up delay-2">
+                <a href="#booking" class="btn btn-primary">Book an Appointment</a>
+                <a href="#services" class="btn btn-outline">View Packages</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="services" class="services">
+        <h2 class="section-title">Our Premium <span>Packages</span></h2>
+        <div class="service-grid">
+            <div th:each="service : ${services}" 
+                 th:classappend="${service.id == 'elite' ? 'featured' : ''}" 
+                 class="service-card glass">
+                <div class="service-icon" th:text="${service.icon}">🚿</div>
+                <h3 th:text="${service.name}">Service Name</h3>
+                <p th:text="${service.description}">Service Description</p>
+                <div class="price" th:text="${'R' + service.price}">R0</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="booking" class="booking">
+        <div class="booking-container glass">
+            <div class="booking-header">
+                <h2>Reserve Your <span>Slot</span></h2>
+                <p>Select your service and preferred time in Witbank.</p>
+            </div>
+            
+            <div th:if="${message}" class="alert-success" style="text-align: center; border-left: 4px solid #00d2ff; padding: 20px; background: rgba(0,210,255,0.05); border-radius: 12px; margin-bottom: 25px;">
+                <p th:text="${message}" style="font-weight: 600; font-size: 1.1rem; margin-top: 0;"></p>
+                
+                <!-- Autonomous Live Outbox Simulation Console -->
+                <div style="margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; text-align: left;">
+                    <span style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #00d2ff; font-weight: 800; display: block; margin-bottom: 8px;">🟢 Autonomous Internal Broadcast Engine Live Log</span>
+                    <div style="background: rgba(0,0,0,0.4); padding: 10px 15px; border-radius: 8px; font-family: monospace; font-size: 0.85rem; color: #4dff4d; line-height: 1.4;">
+                        <div th:if="${bookedCellphone != null and !bookedCellphone.isEmpty()}">
+                            [SMS DISPATCHED] → Phone (<span th:text="${bookedCellphone}"></span>)<br>
+                            <span style="color: rgba(255,255,255,0.7); font-size: 0.8rem;">"Witbank Elite Car Wash: Hello <span th:text="${bookedName}"></span>, your <span th:text="${bookedService}"></span> booking is CONFIRMED."</span>
+                        </div>
+                        <div th:if="${bookedEmail != null and !bookedEmail.isEmpty()}" style="margin-top: 8px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 8px;">
+                            [EMAIL DISPATCHED] → Mailbox (<span th:text="${bookedEmail}"></span>)<br>
+                            <span style="color: rgba(255,255,255,0.7); font-size: 0.8rem;">Subject: Booking Confirmation - <span th:text="${bookedService}"></span></span>
+                        </div>
+                    </div>
+                    <span id="emailjs-status" style="font-size: 0.7rem; color: rgba(255,255,255,0.5); display: block; margin-top: 6px; text-align: right;">Status: Relaying payload securely via EmailJS SDK...</span>
+                </div>
+            </div>
+
+            <form action="/book" method="POST" class="booking-form">
+                <div class="form-group">
+                    <input type="text" name="name" placeholder="Full Name" required>
+                </div>
+                <div class="form-group">
+                    <input type="tel" name="cellphone" placeholder="Cellphone Number (e.g. 2781234567)" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" name="email" placeholder="Email Address" required>
+                </div>
+                <div class="form-group">
+                    <select name="service" id="serviceSelect" required>
+                        <option value="" disabled selected>Select Service</option>
+                        <option th:each="service : ${services}" 
+                                th:value="${service.name}" 
+                                th:text="${service.name}"></option>
+                        <option th:if="${#lists.isEmpty(services)}" value="" disabled>No services available</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="datetime-local" name="time" required>
+                </div>
+                <button type="submit" class="btn btn-primary full-width">Confirm Booking</button>
+            </form>
+        </div>
+    </section>
+
+    <footer class="glass-footer">
+        <div class="footer-content">
+            <div class="footer-info">
+                <h3>Witbank Elite Car Wash</h3>
+                <p>123 Highveld Street, Witbank, Mpumalanga</p>
+                <p>Open Daily: 08:00 - 18:00</p>
+                <a href="/admin/dashboard" class="admin-link" style="color: #00d2ff; text-decoration: none; font-size: 0.8rem; margin-top: 10px; display: inline-block;">→ Access Business Portal (System Report)</a>
+                <br>
+                <a href="/h2-console" target="_blank" class="admin-link" style="color: #4dff4d; text-decoration: none; font-size: 0.8rem; margin-top: 5px; display: inline-block;">🗄️ Open Live SQL Database Console</a>
+            </div>
+            <div class="footer-legal">
+                <p>&copy; 2026 Witbank Elite. Developed for INT316D.</p>
+            </div>
+        </div>
+    </footer>
+    <!-- Official EmailJS Client-Side SDK Integration -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        window.addEventListener('DOMContentLoaded', function() {
+            var bookedEmail = /*[[${bookedEmail}]]*/ null;
+            var bookedName = /*[[${bookedName}]]*/ '';
+            var bookedService = /*[[${bookedService}]]*/ '';
+            var bookedTime = /*[[${bookedTime}]]*/ '';
+            
+            if (bookedEmail && bookedEmail.trim() !== '') {
+                // Initialize EmailJS Engine
+                // IMPORTANT: Replace the placeholder string below with your actual EmailJS Public Key
+                emailjs.init("qfdJEi9hPSL4ONRSk");
+
+                var templateParams = {
+                    to_name: bookedName,
+                    name: bookedName,
+                    to_email: bookedEmail ? bookedEmail.trim() : '',
+                    email: bookedEmail ? bookedEmail.trim() : '',
+                    user_email: bookedEmail ? bookedEmail.trim() : '',
+                    reply_to: bookedEmail ? bookedEmail.trim() : '',
+                    recipient: bookedEmail ? bookedEmail.trim() : '',
+                    service_type: bookedService,
+                    booking_time: bookedTime ? bookedTime.replace('T', ' ') : '',
+                    message: "Witbank Elite Car Wash confirmation/OTP authorization trigger notice."
+                };
+
+                console.log("[EmailJS Client SDK] Disabling server SMTP dependency. Broadcasting physical template payload natively...", templateParams);
+                
+                // Dispatch referencing Service ID: service_renesfe and Template ID: template_1azs709
+                emailjs.send("service_renesfe", "template_1azs709", templateParams)
+                    .then(function(response) {
+                        console.log('[EmailJS CLIENT TRANSPORT SUCCESS]', response.status, response.text);
+                        var statusEl = document.getElementById('emailjs-status');
+                        if (statusEl) {
+                            statusEl.innerHTML = "✓ Delivered to Inbox Natively (EmailJS Transport Verified)";
+                            statusEl.style.color = "#4dff4d";
+                        }
+                    }, function(error) {
+                        console.error('[EmailJS CLIENT TRANSPORT OMITTED]', error);
+                        var statusEl = document.getElementById('emailjs-status');
+                        if (statusEl) {
+                            var errorReason = error.text || error.message || JSON.stringify(error);
+                            statusEl.innerHTML = "⚠ EmailJS Error: " + errorReason;
+                            statusEl.style.color = "#ff4d4d";
+                        }
+                    });
+            }
+        });
+        /*]]>*/
+    </script>
+
+    <script src="/js/main.js"></script>
+</body>
+</html>
